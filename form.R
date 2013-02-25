@@ -8,11 +8,14 @@ library(RHTMLForms)
 forms = getHTMLFormDescription("~/Dropbox/heat/thi_index/CIMIS.html")
 cimis = forms[[1]]	# get the one form of
 
+str(cimis)	# better way to visualise lists?
 
-nom = names(cimis$elements)	# get names
-stations = nom$stationList[["options"]]		# get list of available stations
-sensors = nom$sensorList[["options"]]		# and list of available sensors
+
+opts = cimis$elements
+names(opts)
+stations = opts$stationList[["options"]]		# get list of available stations
+sensors = opts$sensorList[["options"]]		# and list of available sensors
 
 fun = createFunction(forms[[1]])	# create form function
 
-o = fun(enableHourList="",startYear="2012",startMonth="JAN",startDay="1",hourList="0100")	# 
+o = fun(enableHourList="",startYear="2012",startMonth="JAN",startDay="1",hourList="0100")	# dont think it;s connecting?
