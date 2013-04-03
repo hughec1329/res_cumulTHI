@@ -30,5 +30,7 @@ w = sapply(stats, function(i){
 
 grep("Dew",w)                          #  none of the datasets accesible by CDO/REST have Humid !!!
 
+home = getURL("http://maps.googleapis.com/maps/api/geocode/json?address=817+Arthur+st+davis+CA&sensor=true")
+fromJSON(home)
 
 
