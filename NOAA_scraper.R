@@ -13,11 +13,9 @@ data = getForm("http://www.ncdc.noaa.gov/cdo-services/services/datasets",token =
 data = getForm("http://www.ncdc.noaa.gov/cdo-services/services/datasets",token = token) #  get available datasets in JSON
 fromJSON(data)
 
-loc = getForm("http://www.ncdc.noaa.gov/cdo-web/webservices/cdows_locationsearch", token = token)
-
-p = getForm("http://www.ncdc.noaa.gov/cdo-services/services/datasets/GHCND/locations/ZIP:93274/datatypes",token = token)
-p = getForm("http://www.ncdc.noaa.gov/cdo-services/services/datasets/GHCND/locations?latitude=36.132156&longitude=-119.321694/datatypes",token = token)
-p = getForm("http://www.ncdc.noaa.gov/cdo-services/services/datasets/GHCND",token = token)
+p = getForm("http://www.ncdc.noaa.gov/cdo-services/services/datasets/GHCND/locations/ZIP:93274/datatypes",token = token) # search by zip
+p = getForm("http://www.ncdc.noaa.gov/cdo-services/services/datasets/GHCND/locations?latitude=36.132156&longitude=-119.321694/datatypes",token = token) # search by lat long
+p = getForm("http://www.ncdc.noaa.gov/cdo-services/services/datasets/GHCND",token = token) # seatch by data type
 
 o =  getForm("http://www.ncdc.noaa.gov/cdo-services/services/datasets/GHCND/locationsearch?latitude=36.132156&longitude=-119.321694",token = token, radius = 25)	# get stations 25 clicks around vmtrc
 t = unlist(strsplit(o,'"'))
