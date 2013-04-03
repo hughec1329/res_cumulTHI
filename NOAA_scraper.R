@@ -31,6 +31,20 @@ w = sapply(stats, function(i){
 grep("Dew",w)                          #  none of the datasets accesible by CDO/REST have Humid !!!
 
 home = getURL("http://maps.googleapis.com/maps/api/geocode/json?address=817+Arthur+st+davis+CA&sensor=true")
-fromJSON(home)
+out = fromJSON(home)
 
+coords = c(out$results[[1]][[3]][["location"]][["lat"]],out$results[[1]][[3]][["location"]][["lng"]])
+
+address = c("817 arthur st davis ca","248 calder alternate highway lockwood south victoria australia","97 ocean bvld Jan juc vic aus")
+
+       
+geocode = function(i){
+       dn = gsub(" ","+",i)
+       ur = sprintf("http://maps.googleapis.com/maps/api/geocode/json?address=%s&sensor=true",dn)
+       out = fromJSON(getURL(ur))
+       c(out$results[[1]][[3]]$location$lat,out$results[[1]][[3]]$location$lng)
+}
+
+
+sapply(address,geocode)
 
