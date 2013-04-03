@@ -45,6 +45,7 @@ geocode = function(i){
        c(out$results[[1]][[3]]$location$lat,out$results[[1]][[3]]$location$lng)
 }
 
+source("./geocoder.R")
 
 sapply(address,geocode)
 

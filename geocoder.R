@@ -1,5 +1,8 @@
 # function to geocode addresses to lat long
 # 20130403 HCrockford
+library(RCurl)
+library(RHTMLForms)
+library(rjson)
 
 geocode = function(i){
        dn = gsub(" ","+",i)
