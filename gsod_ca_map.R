@@ -37,7 +37,13 @@ hom = sapply(address,geocode)          #
 world = get_map(location = "australia",zoom = 3)
 ggmap(world) + geom_point(aes(x = lng, y = lat, color = "red", size = 10),data = data.frame(t(hom)))
 
-# map stations
+# map all stations
 points(x=gs$LAT/1000,y=gs$LON/1000)
 ca = get_map(location = "ca",zoom = 6)
 ggmap(ca) + geom_point(aes(x = LON/1000, y = LAT/1000),data = gs)
+
+# only big stations - data 2000 - 2012
+gsbig = read.csv("./bigCA.csv",sep = ",",header = FALSE)
+names(gsbig) = c("USAF","WBAN","STATION NAME","CTRY","coutry", "ST", "CALL","LAT", "LON","ELEV(.1M)", "BEGIN","END")
+ca = get_map(location = "ca",zoom = 6)
+ggmap(ca) + geom_point(aes(x = LON/1000, y = LAT/1000),data = gsbig)
