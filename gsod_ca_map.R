@@ -40,10 +40,51 @@ ggmap(world) + geom_point(aes(x = lng, y = lat, color = "red", size = 10),data =
 # map all stations
 points(x=gs$LAT/1000,y=gs$LON/1000)
 ca = get_map(location = "ca",zoom = 6)
-ggmap(ca) + geom_point(aes(x = LON/1000, y = LAT/1000),data = gs)
+jpeg("gsod_map.jpg",quality = 100)
+
+pdf("gsod_map.pdf")
+ggmap(ca) + geom_point(aes(x = LON/1000, y = LAT/1000),data = gs,pch=4) + ggtitle('Location of GSOD stations, CA')
+dev.off()
 
 # only big stations - data 2000 - 2012
 gsbig = read.csv("./bigCA.csv",sep = ",",header = FALSE)
 names(gsbig) = c("USAF","WBAN","STATION NAME","CTRY","coutry", "ST", "CALL","LAT", "LON","ELEV(.1M)", "BEGIN","END")
 ca = get_map(location = "ca",zoom = 6)
 ggmap(ca) + geom_point(aes(x = LON/1000, y = LAT/1000),data = gsbig)
+
+# both
+ggmap(ca,legend = 'bottomright') + 
+geom_point(aes(x = LON/1000, y = LAT/1000),data = gs) + 
+geom_point(aes(x = LON/1000, y = LAT/1000,colour = c(stationsGT10y = "red")),data = gsbig) +
+ggtitle('GSOD station in CA')
+
+# with dairies
+dairy = read.csv("ca_dairy_list.csv",header = TRUE,stringsAsFactors = FALSE)
+addy = do.call(paste,dairy[,3:6])
+add = addy[!grepl("BOX",addy)]         # 1323 that arent po box (lost 13 %)
+
+source("geocoder.R")
+coords = sapply(add,geocode)
+u = data.frame(t(coords))              # ggmap's geocode does funny things, mine overflows
+o = data.frame(matrix(unlist(u),,2))
+
+ggmap(ca) + 
+geom_point(aes(x = LON/1000, y = LAT/1000),data = gs,pch=4) + 
+geom_point(aes(x = lon, y = lat),data = data.frame(t(coords)),pch=18,color = "red") + 
+ggtitle('Location of GSOD stations, CA')
+
+pdf("gsod_dairies.pdf")
+ggmap(ca) + 
+geom_point(aes(x = lon, y = lat),data = o,pch=18,color = "red") +
+geom_point(aes(x = LON/1000, y = LAT/1000),data = gs,pch=4)+
+ggtitle('Location of GSOD stations(black) and dairies(red) in CA')
+dev.off()
+
+# using cimis
+cimis = read.csv("CIMIS_STATIONS.csv")
+pdf("cimis_map.pdf")
+ggmap(ca) + 
+geom_point(aes(x = lon, y = lat),data = o,pch=18,color = "red") +
+geom_point(aes(x = Long, y = Lat),data = cimis,pch=4)+
+ggtitle('Location of CIMIS stations(black) and dairies(red) in CA')
+dev.off()
