@@ -80,11 +80,20 @@ geom_point(aes(x = LON/1000, y = LAT/1000),data = gs,pch=4)+
 ggtitle('Location of GSOD stations(black) and dairies(red) in CA')
 dev.off()
 
-# using cimis
+# using cimis		## can calc distance from w lat long, then querey cimis data with script.
+# or just dl all cimis data from cimis big station then calc nearest
 cimis = read.csv("CIMIS_STATIONS.csv")
 pdf("cimis_map.pdf")
 ggmap(ca) + 
 geom_point(aes(x = lon, y = lat),data = o,pch=18,color = "red") +
 geom_point(aes(x = Long, y = Lat),data = cimis,pch=4)+
+ggtitle('Location of CIMIS stations(black) and dairies(red) in CA')
+dev.off()
+
+# only big cimis
+bigcimis = cimis[start < as.POSIXct("2000-01-01") & is.na(end),]
+pdf("cimis_map.pdf")
+ggmap(ca) + 
+geom_point(aes(x = Long, y = Lat),data = bigcimis,pch=4)
 ggtitle('Location of CIMIS stations(black) and dairies(red) in CA')
 dev.off()
