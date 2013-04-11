@@ -93,12 +93,29 @@ pems.doc = getForm("http://pems.dot.ca.gov/",
 out = getURL("http://pems.dot.ca.gov/?dnode=Controller&content=detector_health&tab=dh_raw&controller_id=403159",curl = curl) # do manually
 getHTMLFormDescription(out)[[2]]       # works?!?!
 
+####################
+## working cimis login!!!
+###################3
+
+library(RCurl)
+library(RHTMLForms)
 fcimi = getHTMLFormDescription("http://wwwcimis.water.ca.gov/cimis/frontLogonData.do")
 cimi.logon = createFunction(fcimi[[1]])
 curl = getCurlHandle(cookiefile = "")
 invisible(cimi.logon(username = "hughec1329",password = "tKEk3K9H",.curl = curl))
-ret = getURL("http://wwwcimis.water.ca.gov/cimis/frontHourlyReport.do",curl = curl)
-getHTMLFormDescription(ret)       # works?!?!
+ret = getURL("http://wwwcimis.water.ca.gov/cimis/frontHourlyReport.do",curl = curl, followlocation = TRUE)
+cimi = getHTMLFormDescription(ret)       # works?!?!
+cimi.scrape = createFunction(cimi$hourlyReportForm,verbose = TRUE)
+
+
+
+out = cimi.scrape(endDay = 31, endMonth = "DEC",endYear = 2012,sensorList = "HLY_REL_HUM",startDay = 1, startMonth = "JAN", startYear = 2012,stationList = 6,hourList = 1200, .curl = curl, .url ="http://wwwcimis.water.ca.gov/cimis/frontHourlyReport.do" )
+cimi.scrape(hourList="0200",.curl = curl, .url = "http://wwwcimis.water.ca.gov/cimis/frontHourlyReport.do")
+cimi.scrape(hourList="0200",outputMethod = "XML",.curl = curl, .url = "http://wwwcimis.water.ca.gov/cimis/frontHourlyReport.do")
+
+cimi.scrape(hourList="0200", endDay = "31", endMonth = "December",endYear = "2012",sensorList = "4-Air Temperature",startDay = "1", startMonth = "January", startYear = "2012",stationList = "6 - Davis, Since Jul/1982",hourList = 1200, outputMethod = "XML", .curl = curl, .url ="http://wwwcimis.water.ca.gov/cimis/frontHourlyReport.do" )
+cimi.scrape(endDay = "31", endMonth = "December",endYear = "2012",sensorList = "4-Air Temperature",startDay = "1", startMonth = "January", startYear = "2012",stationList = "6 - Davis, Since Jul/1982",hourList = 1200, outputMethod = "XML", .curl = curl, .url ="http://wwwcimis.water.ca.gov/cimis/frontHourlyReport.do" )
+# regex to match station name
 
 
 
